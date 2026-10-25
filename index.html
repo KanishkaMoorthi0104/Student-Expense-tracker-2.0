@@ -1079,7 +1079,7 @@
           edit.addEventListener("click", function () { beginEdit(item.id); });
           const remove = makeElement("button", "expense-action delete", "Delete");
           remove.type = "button";
-          edit.disabled = true;
+          remove.disabled = true;
           remove.setAttribute("aria-label", "Delete " + item.title);
           remove.addEventListener("click", function () { deleteExpense(item.id); });
           actions.append(edit, remove);
