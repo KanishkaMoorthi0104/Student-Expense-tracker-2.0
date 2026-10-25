@@ -772,18 +772,18 @@
             <div id="monthlyTrend" class="monthly-chart" role="img" aria-label="Monthly spending chart"></div>
           </section>
           <section class="category-panel" aria-labelledby="budgetTitle">
-            <h3 id="budgetTitle">Monthly budget</h3>
+            <h3 id="budgetTitle" >Monthly budget</h3>
             <p class="category-subtitle">Set a spending target for this month. Your budget is saved only in this browser.</p>
             <form id="budgetForm" class="budget-form" novalidate>
               <div class="field">
                 <label for="monthlyBudget">Budget amount (₹)</label>
                 <input id="monthlyBudget" name="monthlyBudget" type="number" min="0.01" max="100000000" step="0.01" inputmode="decimal" placeholder="e.g. 5000">
               </div>
-              <button class="btn btn-primary" type="submit">Save budget</button>
+              <button class="btn btn-primary" type="submit" disabled>Save budget</button>
             </form>
             <div id="budgetSummary" class="budget-summary" aria-live="polite"></div>
             <p id="budgetStatus" class="tracker-status" role="status" aria-live="polite"></p>
-            <button id="clearBudgetBtn" class="expense-action" type="button" hidden>Remove budget</button>
+            <button id="clearBudgetBtn" class="expense-action" type="button" hidden disabled>Remove budget</button>
           </section>
         </div>
 
@@ -820,8 +820,8 @@
                 <textarea id="expenseNotes" name="notes" maxlength="240" placeholder="Add a short note"></textarea>
               </div>
               <div class="tracker-form-actions">
-                <button class="btn btn-primary" type="submit" id="saveExpenseBtn">Add Expense</button>
-                <button class="btn btn-secondary" type="button" id="cancelEditBtn" hidden>Cancel Edit</button>
+                <button class="btn btn-primary" type="submit" id="saveExpenseBtn" disabled>Add Expense</button>
+                <button class="btn btn-secondary" type="button" id="cancelEditBtn" hidden disabled>Cancel Edit</button>
               </div>
               <p class="tracker-status" id="expenseStatus" role="status" aria-live="polite"></p>
             </form>
@@ -841,7 +841,7 @@
   <!-- ============ Signup form (opened by Get Started buttons) ============ -->
   <div class="modal" id="signupModal" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
     <div class="modal-card">
-      <button class="modal-close" type="button" data-close-signup aria-label="Close">&times;</button>
+      <button class="modal-close" type="button" data-close-signup aria-label="Close" disabled>&times;</button>
       <h2 id="signupTitle">Get started for free</h2>
       <p class="modal-sub">Just three details to get you set up.</p>
 
@@ -858,7 +858,7 @@
           <label for="phone">Phone</label>
           <input id="phone" name="phone" type="tel" placeholder="+91 98765 43210" autocomplete="tel" required>
         </div>
-        <button class="btn btn-primary btn-full" type="submit" id="submitBtn">Get Started — It’s Free</button>
+        <button class="btn btn-primary btn-full" type="submit" id="submitBtn" disabled>Get Started — It’s Free</button>
         <p class="form-status" id="formStatus" role="status"></p>
       </form>
     </div>
@@ -1074,10 +1074,12 @@
           const actions = makeElement("div", "expense-actions");
           const edit = makeElement("button", "expense-action", "Edit");
           edit.type = "button";
+          edit.disabled = true;
           edit.setAttribute("aria-label", "Edit " + item.title);
           edit.addEventListener("click", function () { beginEdit(item.id); });
           const remove = makeElement("button", "expense-action delete", "Delete");
           remove.type = "button";
+          edit.disabled = true;
           remove.setAttribute("aria-label", "Delete " + item.title);
           remove.addEventListener("click", function () { deleteExpense(item.id); });
           actions.append(edit, remove);
