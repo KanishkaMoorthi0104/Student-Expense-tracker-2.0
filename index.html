@@ -415,6 +415,56 @@
 
   .btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
+
+  /* ---------- Working expense tracker ---------- */
+  [hidden] { display: none !important; }
+  .tracker-section { padding: 56px 96px 72px; background: #f7faff; border-top: 1px solid var(--border); }
+  .tracker-shell { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+  .tracker-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .tracker-heading h2 { font-size: 32px; line-height: 1.2; margin-bottom: 8px; }
+  .tracker-heading p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+  .tracker-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .tracker-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 22px; box-shadow: 0 8px 24px rgba(35, 76, 138, 0.04); }
+  .tracker-card small { color: var(--muted); font-size: 12px; display: block; margin-bottom: 10px; }
+  .tracker-card strong { font-size: 26px; color: var(--navy); overflow-wrap: anywhere; }
+  .tracker-layout { display: grid; grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1.5fr); gap: 20px; align-items: start; }
+  .tracker-panel { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 24px; min-width: 0; }
+  .tracker-panel h3 { font-size: 17px; margin-bottom: 18px; }
+  .tracker-form .field { margin-bottom: 15px; }
+  .tracker-form input, .tracker-form select, .tracker-form textarea { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 12px; min-height: 44px; font: inherit; font-size: 14px; color: var(--navy); background: #fff; }
+  .tracker-form textarea { resize: vertical; min-height: 78px; }
+  .tracker-form input:focus, .tracker-form select:focus, .tracker-form textarea:focus { outline: 2px solid var(--blue); border-color: transparent; }
+  .tracker-form-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .tracker-status { min-height: 20px; margin-top: 12px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .tracker-status.error { color: var(--red); }
+  .tracker-status.success { color: var(--green); }
+  .expense-list { display: flex; flex-direction: column; gap: 12px; }
+  .expense-empty { padding: 28px 12px; border: 1px dashed var(--border); border-radius: 10px; text-align: center; color: var(--muted); font-size: 13px; line-height: 1.6; }
+  .expense-item { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; padding: 16px; border: 1px solid var(--border); border-radius: 10px; }
+  .expense-main { min-width: 0; }
+  .expense-title { font-size: 14px; font-weight: 700; overflow-wrap: anywhere; margin-bottom: 6px; }
+  .expense-meta { font-size: 12px; color: var(--muted); line-height: 1.6; overflow-wrap: anywhere; }
+  .expense-amount { font-size: 15px; font-weight: 700; white-space: nowrap; text-align: right; }
+  .expense-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+  .expense-action { border: 1px solid var(--border); border-radius: 6px; background: #fff; color: var(--navy); padding: 6px 9px; font-size: 11px; cursor: pointer; }
+  .expense-action:hover { border-color: var(--blue); color: var(--blue); }
+  .expense-action.delete:hover { border-color: var(--red); color: var(--red); }
+  .tracker-privacy { color: var(--muted); font-size: 12px; line-height: 1.6; }
+  @media (max-width: 1200px) { .tracker-section { padding-left: 48px; padding-right: 48px; } }
+  @media (max-width: 860px) {
+    .tracker-section { padding: 40px 24px 52px; }
+    .tracker-layout { grid-template-columns: 1fr; }
+    .tracker-heading h2 { font-size: 28px; }
+  }
+  @media (max-width: 520px) {
+    .tracker-metrics { grid-template-columns: 1fr; }
+    .tracker-card, .tracker-panel { padding: 18px; }
+    .expense-item { flex-direction: column; }
+    .expense-right { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .expense-actions { margin-top: 0; }
+    .expense-amount { text-align: left; }
+  }
+
   /* ---------- Responsive ---------- */
   @media (max-width: 1200px) {
     .nav, .promise { padding-left: 48px; padding-right: 48px; }
@@ -483,6 +533,7 @@
 
     <div class="account">
       <a href="#" class="signin">Sign In</a>
+      <button class="btn btn-secondary" type="button" data-open-tracker>Open Tracker</button>
       <button class="btn btn-primary" data-open-signup>Get Started</button>
     </div>
   </header>
@@ -518,6 +569,7 @@
               <circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z"/>
             </svg>
           </a>
+          <button class="btn btn-secondary" type="button" data-open-tracker>Open Expense Tracker</button>
         </div>
 
         <div class="reassurance">
@@ -649,6 +701,74 @@
         <span>Simple. Secure. Stress-free.</span>
       </div>
     </section>
+
+    <!-- ============ Working expense tracker ============ -->
+    <section class="tracker-section" id="trackerSection" hidden aria-labelledby="trackerTitle">
+      <div class="tracker-shell">
+        <div class="tracker-heading">
+          <div>
+            <div class="badge" style="margin-bottom:12px"><span class="accent-line"></span><span class="eyebrow">YOUR MONEY, YOUR WAY</span></div>
+            <h2 id="trackerTitle">Expense tracker</h2>
+            <p>Add your spending, make changes whenever you need, and see your totals update automatically.</p>
+          </div>
+          <button class="btn btn-secondary" type="button" data-close-tracker>Back to Home</button>
+        </div>
+
+        <div class="tracker-metrics" aria-live="polite">
+          <div class="tracker-card"><small>Total recorded expenses</small><strong id="totalSpent">₹0.00</strong></div>
+          <div class="tracker-card"><small>Spent this month</small><strong id="monthSpent">₹0.00</strong></div>
+          <div class="tracker-card"><small>Expense entries</small><strong id="expenseCount">0</strong></div>
+        </div>
+
+        <div class="tracker-layout">
+          <section class="tracker-panel" aria-labelledby="expenseFormTitle">
+            <h3 id="expenseFormTitle">Add an expense</h3>
+            <form id="expenseForm" class="tracker-form" novalidate>
+              <div class="field">
+                <label for="expenseTitle">Expense name</label>
+                <input id="expenseTitle" name="title" type="text" maxlength="80" placeholder="e.g. Lunch, bus fare" required>
+              </div>
+              <div class="field">
+                <label for="expenseAmount">Amount (₹)</label>
+                <input id="expenseAmount" name="amount" type="number" min="0.01" max="100000000" step="0.01" inputmode="decimal" placeholder="0.00" required>
+              </div>
+              <div class="field">
+                <label for="expenseCategory">Category</label>
+                <select id="expenseCategory" name="category" required>
+                  <option value="Food">Food</option>
+                  <option value="Travel">Travel</option>
+                  <option value="Education">Education</option>
+                  <option value="Supplies">Supplies</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Health">Health</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="expenseDate">Date</label>
+                <input id="expenseDate" name="date" type="date" required>
+              </div>
+              <div class="field">
+                <label for="expenseNotes">Notes (optional)</label>
+                <textarea id="expenseNotes" name="notes" maxlength="240" placeholder="Add a short note"></textarea>
+              </div>
+              <div class="tracker-form-actions">
+                <button class="btn btn-primary" type="submit" id="saveExpenseBtn">Add Expense</button>
+                <button class="btn btn-secondary" type="button" id="cancelEditBtn" hidden>Cancel Edit</button>
+              </div>
+              <p class="tracker-status" id="expenseStatus" role="status" aria-live="polite"></p>
+            </form>
+          </section>
+
+          <section class="tracker-panel" aria-labelledby="expenseListTitle">
+            <h3 id="expenseListTitle">Your expenses</h3>
+            <div id="expenseList" class="expense-list" aria-live="polite"></div>
+          </section>
+        </div>
+        <p class="tracker-privacy">Privacy note: entries are saved in this browser on this device using local storage. They are not synced to an account or shared between devices. Clearing this browser's site data can remove them.</p>
+      </div>
+    </section>
+
   </main>
 
   <!-- ============ Signup form (opened by Get Started buttons) ============ -->
@@ -749,6 +869,250 @@
         .then(() => showSuccess())
         .catch(() => showError());
     });
+
+    // ---------- Local expense tracker ----------
+    (function () {
+      const STORAGE_KEY = "studentExpenseTracker.expenses.v1";
+      const trackerSection = document.getElementById("trackerSection");
+      const expenseForm = document.getElementById("expenseForm");
+      const expenseTitle = document.getElementById("expenseTitle");
+      const expenseAmount = document.getElementById("expenseAmount");
+      const expenseCategory = document.getElementById("expenseCategory");
+      const expenseDate = document.getElementById("expenseDate");
+      const expenseNotes = document.getElementById("expenseNotes");
+      const expenseList = document.getElementById("expenseList");
+      const expenseStatus = document.getElementById("expenseStatus");
+      const saveExpenseBtn = document.getElementById("saveExpenseBtn");
+      const cancelEditBtn = document.getElementById("cancelEditBtn");
+      const formTitle = document.getElementById("expenseFormTitle");
+      const totalSpentEl = document.getElementById("totalSpent");
+      const monthSpentEl = document.getElementById("monthSpent");
+      const expenseCountEl = document.getElementById("expenseCount");
+      let expenses = [];
+      let editingId = null;
+
+      const money = new Intl.NumberFormat("en-IN", {
+        style: "currency", currency: "INR", minimumFractionDigits: 2, maximumFractionDigits: 2
+      });
+
+      function todayLocal() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        return year + "-" + month + "-" + day;
+      }
+
+      function isValidExpense(item) {
+        return item && typeof item.id === "string" && typeof item.title === "string" &&
+          item.title.trim().length > 0 && item.title.length <= 80 &&
+          typeof item.amount === "number" && Number.isFinite(item.amount) && item.amount > 0 &&
+          typeof item.category === "string" && item.category.length > 0 &&
+          typeof item.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(item.date) &&
+          (typeof item.notes === "string" || item.notes === undefined);
+      }
+
+      function loadExpenses() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return [];
+          const parsed = JSON.parse(raw);
+          if (!Array.isArray(parsed)) return [];
+          return parsed.filter(isValidExpense).map(function (item) {
+            return {
+              id: item.id, title: item.title.trim(), amount: item.amount,
+              category: item.category, date: item.date, notes: item.notes || ""
+            };
+          });
+        } catch (error) {
+          setStatus("Saved expenses could not be read in this browser. You can still try adding an expense.", "error");
+          return [];
+        }
+      }
+
+      function saveExpenses() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
+          return true;
+        } catch (error) {
+          setStatus("Could not save in this browser. Check available storage settings and try again.", "error");
+          return false;
+        }
+      }
+
+      function setStatus(message, type) {
+        expenseStatus.textContent = message;
+        expenseStatus.className = "tracker-status" + (type ? " " + type : "");
+      }
+
+      function createId() {
+        if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
+        return "expense-" + Date.now() + "-" + Math.random().toString(36).slice(2, 10);
+      }
+
+      function makeElement(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+      }
+
+      function render() {
+        const total = expenses.reduce(function (sum, item) { return sum + item.amount; }, 0);
+        const now = new Date();
+        const monthPrefix = String(now.getFullYear()) + "-" + String(now.getMonth() + 1).padStart(2, "0");
+        const monthTotal = expenses.reduce(function (sum, item) {
+          return sum + (item.date.slice(0, 7) === monthPrefix ? item.amount : 0);
+        }, 0);
+        totalSpentEl.textContent = money.format(total);
+        monthSpentEl.textContent = money.format(monthTotal);
+        expenseCountEl.textContent = String(expenses.length);
+        expenseList.replaceChildren();
+
+        if (!expenses.length) {
+          expenseList.appendChild(makeElement("p", "expense-empty", "No expenses yet. Add your first expense using the form."));
+          return;
+        }
+
+        const sorted = expenses.slice().sort(function (a, b) {
+          return b.date.localeCompare(a.date) || b.id.localeCompare(a.id);
+        });
+        sorted.forEach(function (item) {
+          const row = makeElement("article", "expense-item");
+          const main = makeElement("div", "expense-main");
+          main.appendChild(makeElement("p", "expense-title", item.title));
+          main.appendChild(makeElement("p", "expense-meta", item.category + " · " + item.date));
+          if (item.notes) main.appendChild(makeElement("p", "expense-meta", item.notes));
+
+          const right = makeElement("div", "expense-right");
+          right.appendChild(makeElement("p", "expense-amount", money.format(item.amount)));
+          const actions = makeElement("div", "expense-actions");
+          const edit = makeElement("button", "expense-action", "Edit");
+          edit.type = "button";
+          edit.setAttribute("aria-label", "Edit " + item.title);
+          edit.addEventListener("click", function () { beginEdit(item.id); });
+          const remove = makeElement("button", "expense-action delete", "Delete");
+          remove.type = "button";
+          remove.setAttribute("aria-label", "Delete " + item.title);
+          remove.addEventListener("click", function () { deleteExpense(item.id); });
+          actions.append(edit, remove);
+          right.appendChild(actions);
+          row.append(main, right);
+          expenseList.appendChild(row);
+        });
+      }
+
+      function resetEditor() {
+        editingId = null;
+        expenseForm.reset();
+        expenseDate.value = todayLocal();
+        formTitle.textContent = "Add an expense";
+        saveExpenseBtn.textContent = "Add Expense";
+        cancelEditBtn.hidden = true;
+      }
+
+      function beginEdit(id) {
+        const item = expenses.find(function (expense) { return expense.id === id; });
+        if (!item) return;
+        editingId = id;
+        expenseTitle.value = item.title;
+        expenseAmount.value = String(item.amount);
+        expenseCategory.value = item.category;
+        expenseDate.value = item.date;
+        expenseNotes.value = item.notes || "";
+        formTitle.textContent = "Edit expense";
+        saveExpenseBtn.textContent = "Save Changes";
+        cancelEditBtn.hidden = false;
+        setStatus("Editing “" + item.title + "”.", "");
+        expenseTitle.focus();
+        expenseForm.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function deleteExpense(id) {
+        const item = expenses.find(function (expense) { return expense.id === id; });
+        if (!item || !window.confirm("Delete the expense “" + item.title + "”? This cannot be undone.")) return;
+        const previous = expenses;
+        expenses = expenses.filter(function (expense) { return expense.id !== id; });
+        if (!saveExpenses()) {
+          expenses = previous;
+          return;
+        }
+        if (editingId === id) resetEditor();
+        setStatus("Expense deleted.", "success");
+        render();
+      }
+
+      document.querySelectorAll("[data-open-tracker]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          trackerSection.hidden = false;
+          trackerSection.scrollIntoView({ behavior: "smooth", block: "start" });
+          expenseTitle.focus({ preventScroll: true });
+        });
+      });
+
+      document.querySelectorAll("[data-close-tracker]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          trackerSection.hidden = true;
+          document.querySelector(".hero").scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      expenseForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const title = expenseTitle.value.trim();
+        const amount = Number(expenseAmount.value);
+        const category = expenseCategory.value;
+        const date = expenseDate.value;
+        const notes = expenseNotes.value.trim();
+
+        if (!title) { setStatus("Enter an expense name.", "error"); expenseTitle.focus(); return; }
+        if (title.length > 80) { setStatus("Keep the expense name within 80 characters.", "error"); return; }
+        if (!Number.isFinite(amount) || amount <= 0 || amount > 100000000) {
+          setStatus("Enter an amount greater than ₹0 and no more than ₹10,00,00,000.", "error");
+          expenseAmount.focus();
+          return;
+        }
+        if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(date + "T00:00:00"))) {
+          setStatus("Choose a valid expense date.", "error");
+          expenseDate.focus();
+          return;
+        }
+        if (notes.length > 240) { setStatus("Keep notes within 240 characters.", "error"); return; }
+
+        const wasEditing = Boolean(editingId);
+        const previous = expenses.slice();
+        if (wasEditing) {
+          expenses = expenses.map(function (item) {
+            return item.id === editingId ? {
+              id: item.id, title: title, amount: amount, category: category, date: date, notes: notes
+            } : item;
+          });
+        } else {
+          expenses = expenses.concat([{
+            id: createId(), title: title, amount: amount, category: category, date: date, notes: notes
+          }]);
+        }
+
+        if (!saveExpenses()) {
+          expenses = previous;
+          return;
+        }
+        resetEditor();
+        setStatus(wasEditing ? "Expense updated." : "Expense added.", "success");
+        render();
+      });
+
+      cancelEditBtn.addEventListener("click", function () {
+        resetEditor();
+        setStatus("Edit cancelled.", "");
+      });
+
+      // Set the date to the user's local calendar day and restore saved entries.
+      expenseDate.value = todayLocal();
+      expenses = loadExpenses();
+      render();
+    })();
+
   </script>
 </body>
 </html>
