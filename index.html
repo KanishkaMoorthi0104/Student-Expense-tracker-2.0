@@ -1079,15 +1079,18 @@
         }
         if (notes.length > 240) { setStatus("Keep notes within 240 characters.", "error"); return; }
 
-        const previous = expenses;
-        if (editingId) {
+        const wasEditing = Boolean(editingId);
+        const previous = expenses.slice();
+        if (wasEditing) {
           expenses = expenses.map(function (item) {
             return item.id === editingId ? {
               id: item.id, title: title, amount: amount, category: category, date: date, notes: notes
             } : item;
           });
         } else {
-          expenses.push({ id: createId(), title: title, amount: amount, category: category, date: date, notes: notes });
+          expenses = expenses.concat([{
+            id: createId(), title: title, amount: amount, category: category, date: date, notes: notes
+          }]);
         }
 
         if (!saveExpenses()) {
@@ -1095,7 +1098,7 @@
           return;
         }
         resetEditor();
-        setStatus(editingId ? "Expense updated." : "Expense added.", "success");
+        setStatus(wasEditing ? "Expense updated." : "Expense added.", "success");
         render();
       });
 
