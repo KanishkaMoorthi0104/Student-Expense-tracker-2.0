@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Expense Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2864c8;
+    --navy: #12345a;
+    --muted: #6b7e94;
+    --border: #e5ecf5;
+    --panel: #e8f1fd;
+    --track: #eef2f8;
+    --green: #229d6b;
+    --green-bg: #e7f7ef;
+    --purple: #9361d8;
+    --purple-bg: #f2ecfc;
+    --blue-bg: #edf5ff;
+    --orange: #f5a33b;
+    --red: #c0392b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--navy);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+    line-height: normal;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  button { font-family: inherit; }
+
+  /* ---------- Navigation ---------- */
+  .nav {
+    background: #fff;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 96px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 10px; }
+
+  .wallet-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    background: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .wallet-mark svg { width: 23px; height: 23px; }
+
+  .wordmark { display: flex; flex-direction: column; gap: 1px; white-space: nowrap; }
+  .wordmark .name { font-size: 15px; font-weight: 400; color: var(--navy); }
+  .wordmark .desc { font-size: 12px; font-weight: 500; color: var(--muted); }
+
+  .nav-links { display: flex; gap: 32px; font-size: 13px; color: var(--muted); }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-links a.active { color: var(--blue); }
+
+  .account { display: flex; align-items: center; gap: 24px; }
+
+  .signin { font-size: 13px; font-weight: 600; color: var(--navy); }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 50px;
+    padding: 0 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  }
+
+  .btn:active { transform: translateY(1px); }
+  .btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+
+  .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .btn-primary:hover { background: #2259b4; }
+
+  .btn-secondary { background: #fff; border-color: var(--border); color: var(--navy); }
+  .btn-secondary:hover { border-color: var(--blue); }
+
+  .btn svg { width: 17px; height: 17px; flex-shrink: 0; }
+
+  .btn-full { width: 100%; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: linear-gradient(to bottom, #fff, #eef5ff);
+    padding: 74px 96px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+    min-height: 718px;
+  }
+
+  .hero-copy {
+    width: 540px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    flex-shrink: 0;
+  }
+
+  .badge { display: flex; align-items: center; gap: 8px; }
+  .accent-line { width: 22px; height: 2px; background: var(--blue); flex-shrink: 0; }
+  .eyebrow { font-size: 10px; font-weight: 700; color: var(--blue); letter-spacing: 0.02em; white-space: nowrap; }
+
+  h1 {
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--navy);
+  }
+
+  h1 .accent { color: var(--blue); }
+
+  .hero-description {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .reassurance { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .reassurance span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .reassurance svg { width: 13px; height: 13px; color: var(--green); flex-shrink: 0; }
+
+  /* ---------- Product preview ---------- */
+  .preview {
+    background: var(--panel);
+    border-radius: 24px;
+    padding: 16px;
+    width: 600px;
+    max-width: 100%;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .dashboard {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 18px 45px rgba(35, 76, 138, 0.09);
+  }
+
+  .dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .dash-title { font-size: 18px; font-weight: 700; color: var(--navy); }
+  .dash-subtitle { font-size: 10px; color: var(--muted); margin-top: 5px; }
+
+  .date-selector {
+    background: #f7f9fc;
+    border-radius: 6px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .date-selector svg { width: 11px; height: 11px; }
+
+  .dash-tabs {
+    display: flex;
+    gap: 22px;
+    font-size: 11px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+
+  .dash-tabs a.active { color: var(--blue); }
+
+  .metrics { display: flex; gap: 8px; }
+
+  .metric {
+    flex: 1;
+    min-width: 0;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .metric small { font-size: 10px; }
+  .metric strong { font-size: 21px; font-weight: 700; }
+
+  .metric-blue { background: var(--blue-bg); color: var(--blue); }
+  .metric-purple { background: var(--purple-bg); color: var(--purple); }
+  .metric-green { background: var(--green-bg); color: var(--green); }
+
+  .breakdown {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .chart-block { display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; }
+  .chart-title { font-size: 11px; color: var(--navy); }
+
+  .donut {
+    position: relative;
+    width: 138px;
+    height: 138px;
+  }
+
+  .donut svg { width: 138px; height: 138px; transform: rotate(-90deg); }
+
+  .donut-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .donut-center strong { font-size: 22px; font-weight: 400; color: var(--navy); }
+  .donut-center span { font-size: 10px; color: var(--muted); }
+
+  .legend {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .legend-row { display: flex; align-items: center; gap: 7px; font-size: 11px; }
+  .legend-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .legend-label { flex: 1; color: var(--muted); }
+  .legend-value { font-weight: 600; color: var(--navy); white-space: nowrap; }
+
+  .budget { display: flex; flex-direction: column; gap: 9px; }
+
+  .budget-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .budget-labels .title { font-size: 11px; font-weight: 600; color: var(--navy); }
+  .budget-labels .usage { font-size: 10px; color: var(--muted); white-space: nowrap; }
+
+  .budget-track {
+    height: 7px;
+    background: var(--track);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .budget-progress {
+    height: 100%;
+    width: 45%;
+    background: var(--blue);
+    border-radius: 10px;
+  }
+
+  .insight {
+    background: var(--green-bg);
+    border-radius: 8px;
+    padding: 11px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--green);
+  }
+
+  .insight svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .preview-caption {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .preview-caption svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  /* ---------- Promise bar ---------- */
+  .promise {
+    background: #fff;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 22px 96px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .promise-label { font-size: 13px; font-weight: 600; color: var(--navy); }
+
+  .promise-details {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .promise-details svg { width: 19px; height: 19px; flex-shrink: 0; }
+
+  /* ---------- Signup modal ---------- */
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 52, 90, 0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 50;
+  }
+
+  .modal.open { display: flex; }
+
+  .modal-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    box-shadow: 0 18px 45px rgba(35, 76, 138, 0.18);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .modal-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .modal-card .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+  .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .field label { font-size: 12px; font-weight: 600; color: var(--navy); }
+
+  .field input {
+    height: 46px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--navy);
+  }
+
+  .field input:focus { outline: 2px solid var(--blue); border-color: transparent; }
+
+  .form-status { font-size: 13px; min-height: 18px; margin-top: 12px; }
+  .form-status.ok { color: var(--green); }
+  .form-status.err { color: var(--red); }
+
+  .btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1200px) {
+    .nav, .promise { padding-left: 48px; padding-right: 48px; }
+    .hero { padding: 60px 48px; }
+    .preview { width: 520px; }
+    h1 { font-size: 52px; }
+  }
+
+  @media (max-width: 1024px) {
+    .hero { flex-direction: column; align-items: stretch; min-height: auto; }
+    .hero-copy { width: 100%; }
+    .preview { width: 100%; max-width: 600px; margin: 0 auto; }
+  }
+
+  @media (max-width: 860px) {
+    .nav { height: auto; padding: 16px 24px; flex-wrap: wrap; gap: 12px; }
+    .nav-links { display: none; }
+    .hero { padding: 48px 24px; }
+    .promise { padding: 24px; flex-direction: column; align-items: flex-start; }
+    h1 { font-size: 44px; }
+    .hero-description { font-size: 16px; }
+  }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 36px; }
+    .signin { display: none; }
+    .account .btn { height: 44px; padding: 0 16px; font-size: 13px; }
+    .hero-actions { flex-direction: column; }
+    .hero-actions .btn { width: 100%; }
+    .reassurance { gap: 12px; }
+    .dashboard { padding: 18px; }
+    .metrics { flex-direction: column; }
+    .breakdown { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .legend { width: 100%; }
+    .dash-tabs { gap: 16px; }
+    .preview-caption { text-align: center; }
+    .promise-details { gap: 16px; }
+    .modal-card { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ Navigation ============ -->
+  <header class="nav">
+    <a class="brand" href="#">
+      <div class="wallet-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h14a2 2 0 0 1 2 2v3"/>
+          <path d="M3 5v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/>
+          <path d="M21 12h-4a2 2 0 0 0 0 4h4z"/>
+        </svg>
+      </div>
+      <div class="wordmark">
+        <span class="name">Student Expense</span>
+        <span class="desc">Tracker</span>
+      </div>
+    </a>
+
+    <nav class="nav-links">
+      <a href="#" class="active">Home</a>
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <div class="account">
+      <a href="#" class="signin">Sign In</a>
+      <button class="btn btn-primary" data-open-signup>Get Started</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ Hero ============ -->
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="badge">
+          <span class="accent-line"></span>
+          <span class="eyebrow">SMART MONEY. STUDENT LIFE.</span>
+        </div>
+
+        <h1>
+          Less money stress.
+          <span class="accent">More student life.</span>
+        </h1>
+
+        <p class="hero-description">
+          Track daily expenses, understand your spending, and make room for what matters. A simpler way to manage your money, built for student life.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-open-signup>
+            Get Started — It’s Free
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>
+            </svg>
+          </button>
+          <a href="#how-it-works" class="btn btn-secondary">
+            See How It Works
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4z"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="reassurance">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            Free to use
+          </span>
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            No credit card needed
+          </span>
+        </div>
+      </div>
+
+      <div class="preview">
+        <div class="dashboard">
+          <div class="dash-header">
+            <div>
+              <p class="dash-title">Hey, Alex 👋</p>
+              <p class="dash-subtitle">Let’s make your money go further.</p>
+            </div>
+            <div class="date-selector">
+              October 2026
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+          </div>
+
+          <div class="dash-tabs">
+            <a href="#" class="active">Overview</a>
+            <a href="#">Expenses</a>
+            <a href="#">Budgets</a>
+          </div>
+
+          <div class="metrics">
+            <div class="metric metric-blue">
+              <small>Total spent</small>
+              <strong>₹4,850</strong>
+            </div>
+            <div class="metric metric-purple">
+              <small>Daily average</small>
+              <strong>₹242.50</strong>
+            </div>
+            <div class="metric metric-green">
+              <small>Remaining</small>
+              <strong>₹5,150</strong>
+            </div>
+          </div>
+
+          <div class="breakdown">
+            <div class="chart-block">
+              <p class="chart-title">Expenses by category</p>
+              <div class="donut">
+                <svg viewBox="0 0 138 138" aria-hidden="true">
+                  <!-- Circumference ≈ 377 (r = 60). Each segment is its share of ₹4,850. -->
+                  <circle cx="69" cy="69" r="60" fill="none" stroke="#f5a33b" stroke-width="16"
+                          stroke-dasharray="151.6 225.4" stroke-dashoffset="0"/>
+                  <circle cx="69" cy="69" r="60" fill="none" stroke="#2864c8" stroke-width="16"
+                          stroke-dasharray="93.3 283.7" stroke-dashoffset="-151.6"/>
+                  <circle cx="69" cy="69" r="60" fill="none" stroke="#9361d8" stroke-width="16"
+                          stroke-dasharray="73.9 303.1" stroke-dashoffset="-244.9"/>
+                  <circle cx="69" cy="69" r="60" fill="none" stroke="#229d6b" stroke-width="16"
+                          stroke-dasharray="58.3 318.7" stroke-dashoffset="-318.8"/>
+                </svg>
+                <div class="donut-center">
+                  <strong>₹4,850</strong>
+                  <span>Total spent</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="legend">
+              <div class="legend-row">
+                <span class="legend-dot" style="background:#f5a33b"></span>
+                <span class="legend-label">Food</span>
+                <span class="legend-value">₹1,950</span>
+              </div>
+              <div class="legend-row">
+                <span class="legend-dot" style="background:#2864c8"></span>
+                <span class="legend-label">Travel</span>
+                <span class="legend-value">₹1,200</span>
+              </div>
+              <div class="legend-row">
+                <span class="legend-dot" style="background:#9361d8"></span>
+                <span class="legend-label">Education</span>
+                <span class="legend-value">₹950</span>
+              </div>
+              <div class="legend-row">
+                <span class="legend-dot" style="background:#229d6b"></span>
+                <span class="legend-label">Other</span>
+                <span class="legend-value">₹750</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="budget">
+            <div class="budget-labels">
+              <span class="title">Monthly budget</span>
+              <span class="usage">₹4,850 / ₹10,000</span>
+            </div>
+            <div class="budget-track">
+              <div class="budget-progress"></div>
+            </div>
+          </div>
+
+          <div class="insight">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/>
+            </svg>
+            Looking good! You’re within your monthly budget.
+          </div>
+        </div>
+
+        <div class="preview-caption">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          Your money, your data. Always private.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Product promise ============ -->
+    <section class="promise">
+      <p class="promise-label">Built for your student budget.</p>
+      <div class="promise-details">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/><path d="M22 10v6"/>
+        </svg>
+        <span>Simple. Secure. Stress-free.</span>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Signup form (opened by Get Started buttons) ============ -->
+  <div class="modal" id="signupModal" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
+    <div class="modal-card">
+      <button class="modal-close" type="button" data-close-signup aria-label="Close">&times;</button>
+      <h2 id="signupTitle">Get started for free</h2>
+      <p class="modal-sub">Just three details to get you set up.</p>
+
+      <form id="signupForm" novalidate>
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" placeholder="Your name" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" placeholder="+91 98765 43210" autocomplete="tel" required>
+        </div>
+        <button class="btn btn-primary btn-full" type="submit" id="submitBtn">Get Started — It’s Free</button>
+        <p class="form-status" id="formStatus" role="status"></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Deployed Google Apps Script Web App URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4oGTNymjEWEjOJzIIt9bAI2r-IeQnzpvw808IeEjfPvOudZbLS5eXwupHmiJ5LPSOOw/exec";
+
+    const modal = document.getElementById("signupModal");
+    const form = document.getElementById("signupForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const statusEl = document.getElementById("formStatus");
+
+    function openSignup() {
+      modal.classList.add("open");
+      document.getElementById("name").focus();
+    }
+
+    function closeSignup() {
+      modal.classList.remove("open");
+    }
+
+    function setStatus(message, type) {
+      statusEl.textContent = message;
+      statusEl.className = "form-status " + (type || "");
+    }
+
+    function showSuccess() {
+      setStatus("Thanks! You’re on the list.", "ok");
+      form.reset();
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Get Started — It’s Free";
+    }
+
+    function showError() {
+      setStatus("Something went wrong. Please try again.", "err");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Get Started — It’s Free";
+    }
+
+    document.querySelectorAll("[data-open-signup]").forEach(function (btn) {
+      btn.addEventListener("click", openSignup);
+    });
+
+    document.querySelector("[data-close-signup]").addEventListener("click", closeSignup);
+
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeSignup();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("open")) closeSignup();
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      if (!name || !email || !phone) {
+        setStatus("Please fill in all three fields.", "err");
+        return;
+      }
+
+      setStatus("");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      const url = SCRIPT_URL + "?" + new URLSearchParams({ name, email, phone });
+
+      fetch(url, { method: "GET", mode: "no-cors" })
+        .then(() => showSuccess())
+        .catch(() => showError());
+    });
+  </script>
+</body>
+</html>
